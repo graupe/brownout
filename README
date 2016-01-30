@@ -1,0 +1,47 @@
+brownout - simplistic screen color shifter
+============================
+brownout is an approach to adjust monitor color temperature.
+
+
+Requirements
+------------
+In order to build brownout you need the Xlib header files.
+
+
+Installation
+------------
+Edit config.mk to match your local setup (dwm is installed into
+the /usr/local namespace by default).
+
+Afterwards enter the following command to build and install brownout (if
+necessary as root):
+
+    make clean install
+
+If you are going to use the default bluegray color scheme it is highly
+recommended to also install the bluegray files shipped in the dextra package.
+
+
+Running brownout
+-----------
+
+Easing the reducing brightness of attached displays to 60 percent:
+
+   ./brownout 60
+
+Setting the screen colors back to normal:
+
+   ./brownout 100
+
+Decreasing the current level by 5 percent:
+
+   ./brownout -5
+
+Increasing the current level by 12 percent:
+
+   ./brownout +12
+
+Configuration
+-------------
+The configuration of dwm is done by creating a custom config.h
+and (re)compiling the source code.
