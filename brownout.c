@@ -15,7 +15,6 @@
 int
 get_brown_percent(Display *dpy, Window root, Atom brown_atom) {
 	int format;
-	unsigned int *ptags;
 	unsigned long n = 0, extra = 0;
 	unsigned int *p = NULL;
 	Atom atom;
@@ -36,7 +35,6 @@ set_brown_percent(Display *dpy, Window root, Atom brown_atom, int percent) {
 }
 
 char * argv0;
-
 static void
 usage(void)
 {
@@ -79,10 +77,8 @@ main(int argc, char **argv)
 	 float gg = gammag(0.01*percent);
 	 float gb = gammab(0.01*percent);
 
-	 int num_crtcs = res->ncrtc;
 	 for (int c = 0; c < res->ncrtc; c++) {
 		 int crtcxid = res->crtcs[c];
-		 XRRCrtcInfo *crtc_info = XRRGetCrtcInfo(dpy, res, crtcxid);
 		 int size = XRRGetCrtcGammaSize(dpy, crtcxid);
 		 XRRCrtcGamma *crtc_gamma = XRRAllocGamma(size);
 
