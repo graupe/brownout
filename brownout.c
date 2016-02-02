@@ -2,16 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
-#include <X11/Xlibint.h>
-#include <X11/Xproto.h>
 #include <X11/Xatom.h>
 #include <X11/extensions/Xrandr.h>
-#include <X11/extensions/Xrender.h>
-#include <inttypes.h>
 #include <limits.h>
-#include <math.h>
 
 #include "config.h"
+
+char * argv0;
 
 int
 get_brown_percent(Display *dpy, Window root, Atom brown_atom) {
@@ -35,7 +32,6 @@ set_brown_percent(Display *dpy, Window root, Atom brown_atom, int percent) {
 			PropModeReplace, (unsigned char*)&percent, 1);
 }
 
-char * argv0;
 static void
 usage(void)
 {
