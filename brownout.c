@@ -80,7 +80,7 @@ main(int argc, char **argv)
 		 XRRCrtcGamma *crtc_gamma = XRRAllocGamma(size);
 
 		 for (int i = 0; i < size; i++) {
-			 float g = ((float)USHRT_MAX) * i / (size-1);
+			 float g = 1.0 * USHRT_MAX * i / (size-1);
 			 crtc_gamma->red[i] = g * gr;
 			 crtc_gamma->green[i] = g * gg;
 			 crtc_gamma->blue[i] = g * gb;
