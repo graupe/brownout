@@ -70,9 +70,9 @@ main(int argc, char **argv)
 
 	 set_brown_percent(dpy, root, brown_atom, percent);
 
-	 float gr = gammar(0.01*percent);
-	 float gg = gammag(0.01*percent);
-	 float gb = gammab(0.01*percent);
+	 float gr = gammar(percent);
+	 float gg = gammag(percent);
+	 float gb = gammab(percent);
 
 	 for (int c = 0; c < res->ncrtc; c++) {
 		 int crtcxid = res->crtcs[c];
