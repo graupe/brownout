@@ -1,6 +1,14 @@
 brownout - simplistic screen color shifter
 ============================
-brownout is an approach to adjust monitor color temperature.
+brownout is intended to adjust the color temperature of the screen. It is a 
+direct adaptation of Ted Unangst blog post [0], which also explains the 
+motivation behind it. The basic xrandr tool is not able to archive the desired 
+result and alternative programs are bloated compared to the given solution. The 
+term temperature is used only loosely, since the colors are bent to the authors 
+preference, not to any proper temperature scale. The usefulness of the program 
+is considered questionable. Discretion is advised.
+
+[0] http://www.tedunangst.com/flak/post/sct-set-color-temperature
 
 
 Requirements
@@ -10,7 +18,7 @@ In order to build brownout you need the Xlib header files.
 
 Installation
 ------------
-Edit config.mk to match your local setup (dwm is installed into
+Edit config.mk to match your local setup (brownout is installed into
 the /usr/local namespace by default).
 
 Afterwards enter the following command to build and install brownout (if
@@ -18,16 +26,13 @@ necessary as root):
 
     make clean install
 
-If you are going to use the default bluegray color scheme it is highly
-recommended to also install the bluegray files shipped in the dextra package.
-
 
 Running brownout
 -----------
 
 Easing the reducing brightness of attached displays to 60 percent:
 
-   ./brownout 60
+   ./brownout 42
 
 Setting the screen colors back to normal:
 
@@ -37,11 +42,16 @@ Decreasing the current level by 5 percent:
 
    ./brownout -5
 
-Increasing the current level by 12 percent:
+Increasing the current level by 13 percent:
 
-   ./brownout +12
+   ./brownout +13
 
 Configuration
 -------------
-The configuration of dwm is done by creating a custom config.h
+The configuration of brownout is done by creating a custom config.h
 and (re)compiling the source code.
+
+Bugs/Todo
+-------------
+Only the first attached CRTC is actually adjusted. The reason for that is 
+unknown to the author, as of yet.
