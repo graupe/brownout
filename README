@@ -50,8 +50,3 @@ Configuration
 -------------
 The configuration of brownout is done by creating a custom config.h
 and (re)compiling the source code.
-
-Bugs/Todo
--------------
-Only the first attached CRTC is actually adjusted. The reason for that is 
-unknown to the author, as of yet.
