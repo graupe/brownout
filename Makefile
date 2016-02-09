@@ -46,7 +46,7 @@ install: all
 	@cp -f brownout ${DESTDIR}${PREFIX}/bin
 	@echo installing manual pages to ${DESTDIR}${MANPREFIX}/man1
 	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	@sed "s/VERSION/${VERSION}/g" < dmenu.1 > ${DESTDIR}${MANPREFIX}/man1/brownout.1
+	@sed "s/VERSION/${VERSION}/g" < brownout.1 > ${DESTDIR}${MANPREFIX}/man1/brownout.1
 	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/brownout.1
 
 uninstall:
