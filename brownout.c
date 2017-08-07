@@ -70,6 +70,18 @@ brownoutscreen(Display *dpy, int screen, float gr, float gg, float gb)
 	}
 }
 
+static void
+brownallscreens(Display *dpy, int percent)
+{
+	int screen, nscreens = ScreenCount(dpy);
+	float gr = gammar(percent);
+	float gg = gammag(percent);
+	float gb = gammab(percent);
+	for (screen = 0; screen < nscreens; screen++) {
+		brownoutscreen(dpy, screen, gr, gg, gb);
+	}
+}
+
 static int
 setup(Display *dpy, int mode, int percent)
 {
@@ -86,18 +98,6 @@ setup(Display *dpy, int mode, int percent)
 
 	setintatom(dpy, root, brown, percent);
 	return percent;
-}
-
-static void
-brownallscreens(Display *dpy, int percent)
-{
-	int screen, nscreens = ScreenCount(dpy);
-	float gr = gammar(percent);
-	float gg = gammag(percent);
-	float gb = gammab(percent);
-	for (screen = 0; screen < nscreens; screen++) {
-		brownoutscreen(dpy, screen, gr, gg, gb);
-	}
 }
 
 static void
