@@ -14,7 +14,9 @@
 #define VERSION "unknown"
 #endif
 
-char * argv0;
+Display *dpy;
+Window root_window;
+Atom brown_atom;
 
 static void
 die(const char *errstr, ...)
@@ -28,34 +30,37 @@ die(const char *errstr, ...)
 }
 
 static int
-getintatom(Display *dpy, Window root, Atom brown_atom)
+getbrownvalue(char *arg)
 {
-	int format;
-	unsigned long n = 0, extra = 0;
-	unsigned int *p = NULL;
-	Atom atom;
-	int result = 0;
+	int percent = atoi(arg);
 
-	if(XGetWindowProperty(dpy, root, brown_atom, 0L, 1L, False, XA_CARDINAL,
-			&atom, &format, &n, &extra, (unsigned char **)&p) == Success && n > 0) {
-		 result = *p;
-		 XFree(p);
+	if (arg[0] == '+' || arg[0] == '-') {
+		int format;
+		unsigned long n = 0, extra = 0;
+		unsigned int *p = NULL;
+		Atom atom;
+		if(XGetWindowProperty(dpy, root_window, brown_atom, 0L, 1L, False, XA_CARDINAL,
+					&atom, &format, &n, &extra, (unsigned char **)&p) == Success && n > 0) {
+			percent += *p;
+			XFree(p);
+		}
 	}
-	return result;
+	if (percent < 0) return 0;
+	if (percent > 100) return 100;
+	return percent;
 }
 
 static void
-setintatom(Display *dpy, Window root, Atom brown_atom, int value)
+setbrownvalue(int value)
 {
-	XChangeProperty(dpy, root, brown_atom, XA_CARDINAL, 32,
+	XChangeProperty(dpy, root_window, brown_atom, XA_CARDINAL, 32,
 			PropModeReplace, (unsigned char*)&value, 1);
 }
 
 static void
-brownoutscreen(Display *dpy, int screen, float gr, float gg, float gb)
+brownoutscreen(int screen, float gr, float gg, float gb)
 {
-	Window root = RootWindow(dpy, screen);
-	XRRScreenResources *res = XRRGetScreenResourcesCurrent(dpy, root);
+	XRRScreenResources *res = XRRGetScreenResourcesCurrent(dpy, RootWindow(dpy, screen));
 
 	for (int c = 0; c < res->ncrtc; c++) {
 		int crtcxid = res->crtcs[c];
@@ -75,70 +80,38 @@ brownoutscreen(Display *dpy, int screen, float gr, float gg, float gb)
 }
 
 static void
-brownallscreens(Display *dpy, int percent)
+brownallscreens(int percent)
 {
 	int screen, nscreens = ScreenCount(dpy);
 	float gr = gammar(percent);
 	float gg = gammag(percent);
 	float gb = gammab(percent);
 	for (screen = 0; screen < nscreens; screen++) {
-		brownoutscreen(dpy, screen, gr, gg, gb);
+		brownoutscreen(screen, gr, gg, gb);
 	}
-}
-
-static int
-setup(Display *dpy, int mode, int percent)
-{
-	int screen = DefaultScreen(dpy);
-	Window root = RootWindow(dpy, screen);
-	Atom brown = XInternAtom(dpy, "_BROWN_PERCENT", False);
-
-	switch(mode) {
-		case '-': percent = getintatom(dpy, root, brown) - percent; break;
-		case '+': percent = getintatom(dpy, root, brown) + percent; break;
-	}
-	if (percent > 100) percent = 100;
-	else if (percent < 0) percent = 0;
-
-	setintatom(dpy, root, brown, percent);
-	return percent;
-}
-
-static void
-usage(void)
-{
-	fprintf(stderr, "usage: %s [+|-]PERCENT increase,decrease or set the brownout by/to PERCENT\n", argv0);
-	exit(EXIT_FAILURE);
 }
 
 int
 main(int argc, char **argv)
 {
-	char mode = 0;
 	int percent = 0;
-	Display *dpy;
-	argv0 = argv[0];
 
 	if (argc < 2)
-		usage(); /* exits */
+		die("usage: %s [+|-]PERCENT brownscreen to[by] PERCENT\n", argv[0]);
 
 	if (!strcmp("-v", argv[1]))
 		die("brownout-"VERSION", public domain software\n");
 
-	switch(argv[1][0]) {
-		case '+':
-		case '-': mode = argv[1][0];
-			  argv[1]++;
-	} 
-
-	percent = atoi(argv[1]);
-
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("Cannot open display\n");
 
-	percent = setup(dpy, mode, percent);
+	root_window = RootWindow(dpy, DefaultScreen(dpy));
+	brown_atom = XInternAtom(dpy, "_BROWN_PERCENT", False);
+
+	percent = getbrownvalue(argv[1]);
+	brownallscreens(percent);
+	setbrownvalue(percent);
 	printf("%d\n", percent);
-	brownallscreens(dpy, percent);
 
 	XCloseDisplay(dpy);
 
