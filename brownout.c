@@ -10,6 +10,10 @@
 
 #include "config.h"
 
+#ifndef VERSION
+#define VERSION "unknown"
+#endif
+
 char * argv0;
 
 static void
