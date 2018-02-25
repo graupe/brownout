@@ -3,10 +3,10 @@
 
 include config.mk
 
-SRC = brownout.c
+SRC = brownout.c is-day.c
 OBJ = ${SRC:.c=.o}
 
-all: options brownout
+all: options brownout is-day
 
 options:
 	@echo brownout build options:
@@ -18,19 +18,22 @@ options:
 	@echo CC $<
 	@${CC} -c ${CFLAGS} $<
 
-${OBJ}: config.h config.mk
 
 config.h:
 	@echo creating $@ from config.def.h
 	@cp config.def.h $@
 
-brownout: ${OBJ}
+is-day: is-day.o
 	@echo CC -o $@
-	@${CC} -o $@ ${OBJ} ${LDFLAGS}
+	@${CC} -o $@ is-day.o ${LDFLAGS}
+
+brownout: brownout.o
+	@echo CC -o $@
+	@${CC} -o $@ brownout.o ${LDFLAGS}
 
 clean:
 	@echo cleaning
-	@rm -f brownout ${OBJ} brownout-${VERSION}.tar.gz
+	@rm -f brownout is-day ${OBJ} brownout-${VERSION}.tar.gz
 
 dist: clean
 	@echo creating dist tarball
@@ -41,17 +44,18 @@ dist: clean
 	@rm -rf brownout-${VERSION}
 
 install: all
-	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
+	@echo installing executable files to ${DESTDIR}${PREFIX}/bin
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
-	@cp -f brownout ${DESTDIR}${PREFIX}/bin
+	@cp -f brownout is-day ${DESTDIR}${PREFIX}/bin
 	@echo installing manual pages to ${DESTDIR}${MANPREFIX}/man1
 	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
 	@sed "s/VERSION/${VERSION}/g" < brownout.1 > ${DESTDIR}${MANPREFIX}/man1/brownout.1
 	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/brownout.1
 
 uninstall:
-	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
+	@echo removing executable files from ${DESTDIR}${PREFIX}/bin
 	@rm -f ${DESTDIR}${PREFIX}/bin/brownout
+	@rm -f ${DESTDIR}${PREFIX}/bin/is-day
 	@echo removing manual page from ${DESTDIR}${MANPREFIX}/man1
 	@rm -f ${DESTDIR}${MANPREFIX}/man1/brownout.1
 

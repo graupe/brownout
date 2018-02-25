@@ -2,10 +2,12 @@ brownout - simplistic screen color shifter
 ============================
 brownout is intended to adjust the color temperature of the screen. It is a 
 direct adaptation of Ted Unangst blog post [0], which also explains the 
-motivation behind it. The basic xrandr tool is not able to achieve the desired 
-result and alternative programs are bloated compared to the given solution. The 
-term "temperature" is used only loosely, since the colors will be bent to the
-users preference, not to any proper temperature scale.
+motivation behind it.
+
+The basic xrandr tool is not able to achieve the desired result and alternative
+programs are bloated compared to the given solution. The term "temperature" is
+used only loosely, since the colors will be bent to the users preference, not
+to any proper temperature scale.
 
 [0] http://www.tedunangst.com/flak/post/sct-set-color-temperature
 
@@ -49,3 +51,19 @@ Configuration
 -------------
 The configuration of brownout is done by creating a custom config.h
 and (re)compiling the source code.
+
+For automatic adjustments based on estimates of available sunlight, you can use
+the provided tool 'is-day'. It takes two parameters, indicating the latitude
+and longitude in degrees, respectively.
+
+For Hamburg, Germany:
+
+   ./is-day 53.5 -10
+
+It prints a one of 'day', 'sunset', 'dusk', 'night', 'dawn', 'sunrise'. Giving
+an estimate of how fast the lighting is changing currently. You could setup a
+cronjob:
+
+   */1 * * * * * sh -c '[ is-day 53.3 -10 == "night"] && brownout +1 || brownout -1'
+
+Or write a shell script. See the provided "brownoutd" file for an example.

@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+while true; do
+    is-day 53.5 -10
+    sleep 60
+done | while read state; do
+    case $state in
+        day|night) ;;
+        sunset) brownout +1;;
+        dusk) brownout +3;;
+        dawn) brownout -1;;
+        sunrise) brownout -3;;
+    esac
+done
