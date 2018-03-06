@@ -33,12 +33,12 @@
 
 enum day_state { NIGHT=0, DAWN, SUNRISE, DAY, SUNSET, DUSK };
 const char * day_state_names [] = {
-	[NIGHT]="night",
 	[DAWN]="dawn",
 	[SUNRISE]="sunrise",
 	[DAY]="day",
 	[SUNSET]="sunset",
-	[DUSK]="dusk"
+	[DUSK]="dusk",
+	[NIGHT]="night",
 };
 
 struct tm *
@@ -96,8 +96,6 @@ is_day(double latitude, double longitude)
 	double season_angle = acos( -tan(latitude) * tan(sun_decline) );
 	double sun_rise_angle = fmod(CIRCLE+noon_angle+season_angle, CIRCLE);
 	double sun_set_angle = fmod(CIRCLE+noon_angle-season_angle, CIRCLE);
-
-	printf("%lf,%lf, %lf\n", sun_set_angle, sun_rise_angle, diffusion);
 
 	if (sun_set_angle < diffusion) {
 		return DUSK;
