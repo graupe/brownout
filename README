@@ -1,5 +1,5 @@
 brownout - simplistic screen color shifter
-============================
+==========================================
 brownout is intended to adjust the color temperature of the screen. It is a 
 direct adaptation of Ted Unangst blog post [0], which also explains the 
 motivation behind it.
@@ -7,9 +7,51 @@ motivation behind it.
 The basic xrandr tool is not able to achieve the desired result and alternative
 programs are bloated compared to the given solution. The term "temperature" is
 used only loosely, since the colors will be bent to the users preference, not
-to any proper temperature scale.
+to any fixed temperature scale.
 
 [0] http://www.tedunangst.com/flak/post/sct-set-color-temperature
+
+
+Running brownout
+----------------
+
+Adjusting the color of attached displays to 42 percent of the curve:
+
+   ./brownout 42
+
+Setting the screen colors back to normal:
+
+   ./brownout 0
+
+Decreasing the current level by 5 percent:
+
+   ./brownout -5
+
+Increasing the current level by 13 percent:
+
+   ./brownout +13
+
+
+Configuration
+-------------
+The configuration of brownout is done by creating a custom config.h
+and (re)compiling the source code.
+
+For automatic adjustments based on estimates of available sunlight, you can use
+use the provided tool 'is-day'. It takes two parameters, indicating the
+latitude and longitude in degrees, respectively.
+
+For Hamburg, Germany:
+
+   ./is-day 53.5 -10
+
+It prints one of 'day', 'sunset', 'dusk', 'night', 'dawn', 'sunrise', giving
+an indication of how fast the lighting is changing currently. The return code
+will also indicate, if it is night or day. You could setup a cronjob:
+
+   */1 * * * * * sh -c 'is-day 53.3 -10 && brownout -1 || brownout +1'
+
+Or write a shell script. See the provided "brownoutd" file for an example.
 
 
 Requirements
@@ -28,42 +70,3 @@ necessary as root):
     make clean install
 
 
-Running brownout
------------
-
-Adjusting the color of attached displays to 42 percent of the curve:
-
-   ./brownout 42
-
-Setting the screen colors back to normal:
-
-   ./brownout 0
-
-Decreasing the current level by 5 percent:
-
-   ./brownout -5
-
-Increasing the current level by 13 percent:
-
-   ./brownout +13
-
-Configuration
--------------
-The configuration of brownout is done by creating a custom config.h
-and (re)compiling the source code.
-
-For automatic adjustments based on estimates of available sunlight, you can use
-the provided tool 'is-day'. It takes two parameters, indicating the latitude
-and longitude in degrees, respectively.
-
-For Hamburg, Germany:
-
-   ./is-day 53.5 -10
-
-It prints a one of 'day', 'sunset', 'dusk', 'night', 'dawn', 'sunrise'. Giving
-an estimate of how fast the lighting is changing currently. You could setup a
-cronjob:
-
-   */1 * * * * * sh -c '[ is-day 53.3 -10 == "night"] && brownout +1 || brownout -1'
-
-Or write a shell script. See the provided "brownoutd" file for an example.
