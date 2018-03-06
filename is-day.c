@@ -123,9 +123,13 @@ main(int argc, char *argv[])
 	} else {
 		double latitude = CIRCLE * atof(argv[1])/360.;
 		double longitude = CIRCLE * fmod(atof(argv[2])/360. + 1., 1.);
+		int day_state = is_day(latitude, longitude);
 
-		puts(day_state_names[is_day(latitude, longitude)]);
-		return EXIT_SUCCESS;
+		puts(day_state_names[day_state]);
+
+		if (day_state == SUNRISE || day_state == DAY || day_state == SUNSET) {
+			return EXIT_SUCCESS;
+		}
 	}
 
 	return EXIT_FAILURE;
