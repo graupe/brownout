@@ -5,7 +5,9 @@ while true; do
     sleep 15
 done | while read state; do
     case $state in
-        day|night) ;;
+        # flip flop if at maximum, otherwise asume use has readjusted manually.
+        day) [ `brownout +0` == "1000" ] && brownout 0 ;;
+        night) [ `brownout +0` == "0" ] && brownout 1000 ;;
         sunset) brownout +2;;
         dusk) brownout +5;;
         dawn) brownout -2;;
