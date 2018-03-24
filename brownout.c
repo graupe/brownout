@@ -32,7 +32,7 @@ die(const char *errstr, ...)
 static int
 getbrownvalue(char *arg)
 {
-	int percent = atoi(arg);
+	int permille = atoi(arg);
 
 	if (arg[0] == '+' || arg[0] == '-') {
 		int format;
@@ -41,13 +41,13 @@ getbrownvalue(char *arg)
 		Atom atom;
 		if(XGetWindowProperty(dpy, root_window, brown_atom, 0L, 1L, False, XA_CARDINAL,
 					&atom, &format, &n, &extra, (unsigned char **)&p) == Success && n > 0) {
-			percent += *p;
+			permille += *p;
 			XFree(p);
 		}
 	}
-	if (percent < 0) return 0;
-	if (percent > 100) return 100;
-	return percent;
+	if (permille < 0) return 0;
+	if (permille > 1000) return 1000;
+	return permille;
 }
 
 static void
@@ -94,7 +94,7 @@ brownallscreens(int percent)
 int
 main(int argc, char **argv)
 {
-	int percent = 0;
+	int permille = 0;
 
 	if (argc < 2)
 		die("usage: %s [+|-]PERCENT brownscreen to[by] PERCENT\n", argv[0]);
@@ -108,10 +108,10 @@ main(int argc, char **argv)
 	root_window = RootWindow(dpy, DefaultScreen(dpy));
 	brown_atom = XInternAtom(dpy, "_BROWN_PERCENT", False);
 
-	percent = getbrownvalue(argv[1]);
-	brownallscreens(percent);
-	setbrownvalue(percent);
-	printf("%d\n", percent);
+	permille = getbrownvalue(argv[1]);
+	brownallscreens(permille);
+	setbrownvalue(permille);
+	printf("%d\n", permille);
 
 	XCloseDisplay(dpy);
 

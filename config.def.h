@@ -4,9 +4,9 @@
  * to brain malfunction yellow */
 #include <math.h>
 /* each functions output is used to scale the relevant color channel */
-static float gammar(int percent) { return (.9 + .1*(1-.01*percent)); }
-static float gammag(int percent) { return (.3 + .1*(1-.01*percent) + .6*exp((-.01*percent)/3.0)); }
-static float gammab(int percent) { return (.0 + .1*(1-.01*percent) + .9*exp( -.01*percent)); }
+static float gammar(int permille) { return (.9 + .1*(1-.001*permille)); }
+static float gammag(int permille) { return (.3 + .1*(1-.001*permille) + .6*exp((-.001*permille)/3.0)); }
+static float gammab(int permille) { return (.0 + .1*(1-.001*permille) + .9*exp( -.001*permille)); }
 
 #else
 /* This resembles the original way of looking up values from a table.
@@ -37,12 +37,12 @@ static const struct whitepoint whitepoints[] = {
 	{ 1.00,  0.18,  0.00, }, /* 1000K */
 };
 enum { red, green, blue};
-static float avg(int percent, int color)
+static float avg(int permille, int color)
 {
 	const int size = -1 + sizeof whitepoints/sizeof whitepoints[0];
-	const int gapsize = 100 / size;
-	const int wpi = percent / gapsize;
-	const float avgratio = (percent % gapsize) / (1.0*gapsize);
+	const int gapsize = 1000 / size;
+	const int wpi = permille / gapsize;
+	const float avgratio = (permille % gapsize) / (1.0*gapsize);
 	const struct whitepoint * wp = &whitepoints[wpi];
 	float c, cn;
 	switch(color) {
@@ -52,7 +52,7 @@ static float avg(int percent, int color)
 	}
 	return c * (1.0 - avgratio) + cn * avgratio;
 }
-static float gammar(int percent) { return avg(percent, red); }
-static float gammag(int percent) { return avg(percent, green); }
-static float gammab(int percent) { return avg(percent, blue); }
+static float gammar(int permille) { return avg(permille, red); }
+static float gammag(int permille) { return avg(permille, green); }
+static float gammab(int permille) { return avg(permille, blue); }
 #endif

@@ -2,13 +2,13 @@
 
 while true; do
     is-day 53.5 -10
-    sleep 60
+    sleep 15
 done | while read state; do
     case $state in
         day|night) ;;
-        sunset) brownout +1;;
-        dusk) brownout +3;;
-        dawn) brownout -1;;
-        sunrise) brownout -3;;
+        sunset) brownout +2;;
+        dusk) brownout +5;;
+        dawn) brownout -2;;
+        sunrise) brownout -5;;
     esac
 done
