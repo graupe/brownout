@@ -27,7 +27,7 @@ is-day: is-day.o
 	@echo CC -o $@
 	@${CC} -o $@ is-day.o ${LDFLAGS}
 
-brownout: brownout.o
+brownout: brownout.o config.h
 	@echo CC -o $@
 	@${CC} -o $@ brownout.o ${LDFLAGS}
 
