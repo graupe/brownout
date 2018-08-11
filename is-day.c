@@ -1,7 +1,4 @@
-/*
- * Copyright (C) 2018 Stefan Schulze <stefan.schulze@alemo.de>
- *
- * Distributed under terms of the MIT license.
+/* public domain
  *
  * The calculation are approximations. Ignored factors (among others, I guess):
  *
