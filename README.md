@@ -9,8 +9,6 @@ programs are bloated compared to the given solution. The alternatives are
 either [flux][1] or [redshift][2]. The former is encumbered by only being
 provided as a blob. The later is overall more complex than brownout.
 
-This program lacks support for geolocation.
-
 The term "temperature" is used only loosely, since the colors will be adjusted
 to the users preference, not to any fixed temperature scale.
 

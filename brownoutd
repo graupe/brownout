@@ -1,7 +1,15 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+function geolocate() {
+    IFS=, read latitude longitude <<<$(curl -s ipinfo.io/loc)
+}
+
+trap geolocate USR1 
+
+geolocate
 
 while true; do
-    is-day 53.5 -10
+    is-day ${latitude:=53.5} ${longitude:=9.9}
     sleep 15
 done | while read state; do
     case $state in
