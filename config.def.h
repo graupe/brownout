@@ -1,14 +1,4 @@
 /* public domain */
-#if 1
-/* use math to calculate new color values. The default config goes from normal
- * to brain malfunction yellow */
-#include <math.h>
-/* each functions output is used to scale the relevant color channel */
-static float gammar(int permille) { return (.9 + .1*(1-.001*permille)); }
-static float gammag(int permille) { return (.3 + .1*(1-.001*permille) + .6*exp((-.001*permille)/3.0)); }
-static float gammab(int permille) { return (.0 + .1*(1-.001*permille) + .9*exp( -.001*permille)); }
-
-#else
 /* This resembles the original way of looking up values from a table.
  * Cribbed from redshift, but truncated with 500K steps and reduced accuracy to
  * one percent */
@@ -55,4 +45,3 @@ static float avg(int permille, int color)
 static float gammar(int permille) { return avg(permille, red); }
 static float gammag(int permille) { return avg(permille, green); }
 static float gammab(int permille) { return avg(permille, blue); }
-#endif
