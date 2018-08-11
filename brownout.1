@@ -4,9 +4,9 @@ brownout \- simplistic color temperature adjustments
 .SH SYNOPSIS
 .B brownout
 .RB [ \-v ]
-.RB [ \- | + ]percent
+.RB [ \- | + ]permille
 .SH DESCRIPTION
-brownout adjusts the screen color temperature to the user specified percentage.
+brownout adjusts the screen color temperature to the user specified permille.
 This can be useful when the ambient lighting conditions will make the displayed
 colors appear out of place and might induce an irritation to the perception of
 the users. It depends on preferences of the user if this reduces
@@ -19,10 +19,10 @@ brownout will print the new percentage value to standard output.
 prints version information to standard output, then exits.
 .SH ARGUMENTS
 .TP
-.B percent
-A number from 0 to 100 that indicates how much the screen should be adjusted,
-where 0 means no modification and 100 full extend. If the number is preceded
-with a plus or minus sign the current value is increased or decreased,
+.B permille
+A number from 0 to 1000 that indicates how much the screen should be adjusted,
+where 0 means no modification and 1000 full extend. If the number is preceded
+with a plus or minus sign the currently active value is increased or decreased,
 respectively.
 .SH CUSTOMIZATION
 brownout is customized by creating a custom config.h and (re)compiling the source

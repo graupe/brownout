@@ -1,13 +1,15 @@
 brownout - simplistic screen color shifter
 ==========================================
 brownout is intended to adjust the color temperature of the screen. It is a 
-direct adaptation of Ted Unangst blog post [0], which also explains the 
+direct adaptation of Ted Unangst blog [post][0], which also explains the 
 motivation behind it.
 
 The basic xrandr tool is not able to achieve the desired result and alternative
 programs are bloated compared to the given solution. The alternatives are
 either [flux][1] or [redshift][2]. The former is encumbered by only being
 provided as a blob. The later is overall more complex than brownout.
+
+This program lacks support for geolocation.
 
 The term "temperature" is used only loosely, since the colors will be adjusted
 to the users preference, not to any fixed temperature scale.
@@ -21,7 +23,7 @@ Running brownout
 
 Adjusting the color of attached displays to 42 percent of the curve:
 
-    ./brownout 42
+    ./brownout 420
 
 Setting the screen colors back to normal:
 
@@ -29,11 +31,11 @@ Setting the screen colors back to normal:
 
 Decreasing the current level by 5 percent:
 
-    ./brownout -5
+    ./brownout -50
 
 Increasing the current level by 13 percent:
 
-    ./brownout +13
+    ./brownout +130
 
 
 Configuration
