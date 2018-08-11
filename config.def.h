@@ -31,18 +31,18 @@ static const struct whitepoint whitepoints[] = {
 enum { red, green, blue};
 static float avg(int permille, int color)
 {
-	const int size = -1 + sizeof whitepoints/sizeof whitepoints[0];
-	const int gapsize = 1000 / size;
-	const int wpi = permille / gapsize;
-	const float avgratio = (permille % gapsize) / (1.0*gapsize);
-	const struct whitepoint * wp = &whitepoints[wpi];
+	const unsigned int transitions = -1 + sizeof(whitepoints)/sizeof(whitepoints[0]);
+	const float transition_width = 1000.0 / transitions;
+	const int transition = 1.*permille / transition_width;
+	const float transition_progress_ratio = (1.*permille - transition_width * transition) / transition_width;
+	const struct whitepoint * wp = &whitepoints[transition];
 	float c, cn;
 	switch(color) {
 		case red:   c = wp[0].r, cn = wp[1].r; break;
 		case green: c = wp[0].g, cn = wp[1].g; break;
 		default:    c = wp[0].b, cn = wp[1].b; break;
 	}
-	return c * (1.0 - avgratio) + cn * avgratio;
+	return c - c * transition_progress_ratio + cn * transition_progress_ratio;
 }
 static float gammar(int permille) { return avg(permille, red); }
 static float gammag(int permille) { return avg(permille, green); }
