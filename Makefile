@@ -23,11 +23,13 @@ config.h:
 	@echo creating $@ from config.def.h
 	@cp config.def.h $@
 
+${OBJ}: config.h
+
 is-day: is-day.o
 	@echo CC -o $@
 	@${CC} -o $@ is-day.o ${LDFLAGS}
 
-brownout: brownout.o config.h
+brownout: brownout.o
 	@echo CC -o $@
 	@${CC} -o $@ brownout.o ${LDFLAGS}
 
