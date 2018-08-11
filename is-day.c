@@ -25,7 +25,7 @@
 #define MAX_SUN_DECLINATION (-.40903)
 #define RAD_PER_DAY (CIRCLE/365.0)
 #define RAD_PER_DEG (CIRCLE/360.0)
-/* days that January the 1st is behind the longest night */
+/* days that January 1st is behind the longest night */
 #define SOUTHERN_SOLSCTICES_OFFSET 10.0
 
 enum day_state { NIGHT=0, DAWN, SUNRISE, DAY, SUNSET, DUSK };
@@ -77,12 +77,8 @@ is_day(double latitude, double longitude)
 	double day_fraction = (gmt->tm_hour*60.+gmt->tm_min)/(24.*60.);
 	/* essentially the angle of earth position in orbit around the sun (according to Wikipedia) */
 	double elliptic_longitude = RAD_PER_DAY * (SOUTHERN_SOLSCTICES_OFFSET + calendar_day + day_fraction);
-	/* angle of equatorial plane and the sun rays */
+	/* angle between equatorial plane and the sun rays */
 	double sun_decline = asin(sin(MAX_SUN_DECLINATION) * cos(elliptic_longitude));
-	/* the "sunset" should start at most one hour and 15 minutes before
-	 * actual sunset, if latidue is 90. That is obviously not correct, but
-	 * it gives good enough estimates */
-	double diffusion =  fmod(CIRCLE+(1.25/24.)*4.*(latitude-sun_decline), CIRCLE);
 	/* angle of earth's rotation around it's axis */
 	double day_angle = CIRCLE*day_fraction;
 	/* angle that is missing until noon at your position */
@@ -91,10 +87,19 @@ is_day(double latitude, double longitude)
 	 * and the latitude disc at midnight (where the angle would be 90
 	 * deg, if decline was 0) */
 	double season_angle = acos( -tan(latitude) * tan(sun_decline) );
+	/* the remaining angle between current earth roation and the sunrise */
 	double sun_rise_angle = fmod(CIRCLE+noon_angle+season_angle, CIRCLE);
+	/* same for sunset */
 	double sun_set_angle = fmod(CIRCLE+noon_angle-season_angle, CIRCLE);
+	/* the "sunset" should start at most one hour and 15 minutes before
+	 * actual sunset, if latidue is 90. That is obviously not correct, but
+	 * it gives good enough estimates */
+	double diffusion =  fmod(CIRCLE+(1.25/24.)*4.*(latitude-sun_decline), CIRCLE);
+	/* make the dusk/dawn have a longer strech (just a guess, again) */
+	double twilight_diffusion = 3.*diffusion;
 
-	if (sun_set_angle < diffusion) {
+
+	if (sun_set_angle < twilight_diffusion) {
 		return DUSK;
 	}
 	if (sun_set_angle > CIRCLE-diffusion) {
@@ -103,7 +108,7 @@ is_day(double latitude, double longitude)
 	if (sun_rise_angle < diffusion) {
 		return SUNRISE;
 	}
-	if (sun_rise_angle > CIRCLE-diffusion) {
+	if (sun_rise_angle > CIRCLE-twilight_diffusion) {
 		return DAWN;
 	}
 	if (sun_rise_angle < sun_set_angle) {
