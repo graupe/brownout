@@ -89,7 +89,7 @@ is_day(double latitude, double longitude)
 	/* angle of earth's rotation around it's axis */
 	double day_angle = CIRCLE*day_fraction;
 	/* angle that is missing until noon at your position */
-	double noon_angle = CIRCLE_HALF+day_angle-longitude;
+	double noon_angle = CIRCLE_HALF+day_angle+longitude;
 	/* angle between the disc slicing the earth into night and day
 	 * and the latitude disc at midnight (where the angle would be 90
 	 * deg, if decline was 0) */

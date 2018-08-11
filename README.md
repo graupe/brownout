@@ -49,13 +49,13 @@ latitude and longitude in degrees, respectively.
 
 For Hamburg, Germany:
 
-    ./is-day 53.5 -10
+    ./is-day 53.5 9.9
 
 It prints one of 'day', 'sunset', 'dusk', 'night', 'dawn', 'sunrise', giving
 an indication of how fast the lighting is changing currently. The return code
 will also indicate, if it is night or day. You could setup a cronjob:
 
-    */1 * * * * * sh -c 'is-day 53.3 -10 && brownout -1 || brownout +1'
+    */1 * * * * * sh -c 'is-day 53.3 9.9 && brownout -1 || brownout +1'
 
 Or write a shell script. See the provided "brownoutd" file for an example.
 
