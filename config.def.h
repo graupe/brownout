@@ -4,6 +4,7 @@
  * one percent */
 struct whitepoint { float r, g, b; };
 static const struct whitepoint whitepoints[] = {
+#if 0 // we don't want cooler colors
 	{ 0.77,  0.85,  1.00, },
 	{ 0.77,  0.85,  1.00, },
 	{ 0.78,  0.86,  1.00, }, /* 10000K */
@@ -13,6 +14,7 @@ static const struct whitepoint whitepoints[] = {
 	{ 0.87,  0.92,  1.00, },
 	{ 0.91,  0.94,  1.00, },
 	{ 0.95,  0.96,  1.00, },
+#endif
 	{ 1.00,  1.00,  1.00, }, /* 6500K */
 	{ 1.00,  0.97,  0.94, },
 	{ 1.00,  0.93,  0.88, },
